@@ -2,8 +2,10 @@ use std::io;
 use std::io::Write;
 use std::collections::HashMap;
 
+type DataValue = String;
+
 fn main() {
-    let mut kvstore: HashMap<String, String> = HashMap::new();
+    let mut kvstore: HashMap<String, DataValue> = HashMap::new();
     println!("Start Rust KeyValueStore.");
 
     loop {
@@ -26,7 +28,7 @@ fn main() {
                     continue;
                 }
                 let key: String = commands.get(1).unwrap().to_string();
-                let val: String = commands.get(2).unwrap().to_string();
+                let val: DataValue = commands.get(2).unwrap().to_string();
                 kvstore.insert(key, val);
                 println!("Stored data.");
             }
@@ -40,7 +42,7 @@ fn main() {
                     println!("Unstored: {}", &key);
                     continue;
                 }
-                let val: String = kvstore.get(&key).unwrap().to_string();
+                let val: DataValue = kvstore.get(&key).unwrap().to_string();
                 println!("Getted value: {}", &val);
             }
             "quit" | "exit" => {
