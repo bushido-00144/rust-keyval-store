@@ -21,13 +21,25 @@ fn main() {
 
         match command {
             "store" => {
+                if commands.len() != 3 {
+                    println!("Use > store <key> <value>");
+                    continue;
+                }
                 let key: String = commands.get(1).unwrap().to_string();
                 let val: String = commands.get(2).unwrap().to_string();
                 kvstore.insert(key, val);
                 println!("Stored data.");
             }
             "get" => {
+                if commands.len() != 2 {
+                    println!("Use > get <key>");
+                    continue;
+                }
                 let key: String = commands.get(1).unwrap().to_string();
+                if kvstore.get(&key).is_none() {
+                    println!("Unstored: {}", &key);
+                    continue;
+                }
                 let val: String = kvstore.get(&key).unwrap().to_string();
                 println!("Getted value: {}", &val);
             }
