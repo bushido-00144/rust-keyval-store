@@ -2,10 +2,36 @@ use std::io;
 use std::io::Write;
 use std::collections::HashMap;
 
-type DataValue = String;
+struct DataValue {
+    value: String
+}
+
+impl DataValue {
+    fn new(val: String) -> DataValue {
+        DataValue{value: val}
+    }
+}
+
+struct DataStore {
+    store: HashMap<String, DataValue>
+}
+
+impl DataStore {
+    fn new() -> DataStore {
+        DataStore{store: HashMap::new()}
+    }
+
+    fn store_data(&mut self, key: String, val: DataValue) {
+        self.store.insert(key, val);
+    }
+
+    fn get_data(&self, key: &String) -> Option<&DataValue> {
+        self.store.get(key)
+    }
+}
 
 fn main() {
-    let mut kvstore: HashMap<String, DataValue> = HashMap::new();
+    let mut kvstore: DataStore = DataStore::new();
     println!("Start Rust KeyValueStore.");
 
     loop {
@@ -28,9 +54,8 @@ fn main() {
                     continue;
                 }
                 let key: String = commands.get(1).unwrap().to_string();
-                let val: DataValue = commands.get(2).unwrap().to_string();
-                kvstore.insert(key, val);
-                println!("Stored data.");
+                let val: DataValue = DataValue::new(commands.get(2).unwrap().to_string());
+                kvstore.store_data(key, val);
             }
             "get" => {
                 if commands.len() != 2 {
@@ -38,11 +63,12 @@ fn main() {
                     continue;
                 }
                 let key: String = commands.get(1).unwrap().to_string();
-                if kvstore.get(&key).is_none() {
-                    println!("Unstored: {}", &key);
+                let val: Option<&DataValue> = kvstore.get_data(&key);
+                if val.is_none() {
+                    println!("Unstored {}", key.to_string());
                     continue;
                 }
-                let val: DataValue = kvstore.get(&key).unwrap().to_string();
+                let val: String = val.unwrap().value.to_string();
                 println!("Getted value: {}", &val);
             }
             "quit" | "exit" => {
