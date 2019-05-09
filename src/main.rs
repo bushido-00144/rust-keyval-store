@@ -32,6 +32,14 @@ impl DataStore {
     fn get_data(&self, key: &String) -> Option<&DataValue> {
         self.store.get(key)
     }
+
+    fn update_data(&mut self, key: String, val: DataValue) -> Result<String, String> {
+        if !self.store.contains_key(&key) {
+            return Err("Not found key".to_string());
+        }
+        self.store.insert(key, val);
+        Ok("Updated data".to_string())
+    }
 }
 
 fn main() {
@@ -77,6 +85,18 @@ fn main() {
                 }
                 let val: String = val.unwrap().value.to_string();
                 println!("Getted value: {}", &val);
+            }
+            "update" => {
+                if commands.len() != 3 {
+                    println!("Use > update <key> <value>");
+                    continue;
+                }
+                let key: String = commands.get(1).unwrap().to_string();
+                let val: DataValue = DataValue::new(commands.get(2).unwrap().to_string());
+                match kvstore.update_data(key, val) {
+                    Ok(message) => println!("{}", message),
+                    Err(err) => println!("{}", err),
+                }
             }
             "quit" | "exit" => {
                 println!("Bye!");
