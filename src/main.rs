@@ -21,8 +21,12 @@ impl DataStore {
         DataStore{store: HashMap::new()}
     }
 
-    fn store_data(&mut self, key: String, val: DataValue) {
+    fn store_data(&mut self, key: String, val: DataValue) -> Result<String, String> {
+        if self.store.contains_key(&key) {
+            return Err("Already exist key".to_string());
+        }
         self.store.insert(key, val);
+        Ok("Stored data".to_string())
     }
 
     fn get_data(&self, key: &String) -> Option<&DataValue> {
@@ -55,7 +59,10 @@ fn main() {
                 }
                 let key: String = commands.get(1).unwrap().to_string();
                 let val: DataValue = DataValue::new(commands.get(2).unwrap().to_string());
-                kvstore.store_data(key, val);
+                match kvstore.store_data(key, val) {
+                    Ok(message) => println!("{}", message),
+                    Err(err) => println!("{}", err),
+                }
             }
             "get" => {
                 if commands.len() != 2 {
