@@ -40,6 +40,10 @@ impl DataStore {
         self.store.insert(key, val);
         Ok("Updated data".to_string())
     }
+
+    fn delete_data(&mut self, key: &String) -> Option<DataValue> {
+        self.store.remove(key)
+    }
 }
 
 fn main() {
@@ -97,6 +101,19 @@ fn main() {
                     Ok(message) => println!("{}", message),
                     Err(err) => println!("{}", err),
                 }
+            }
+            "delete" => {
+                if commands.len() != 2 {
+                    println!("Use > delete <key>");
+                    continue;
+                }
+                let key: String = commands.get(1).unwrap().to_string();
+                let val: Option<DataValue> = kvstore.delete_data(&key);
+                if val.is_none() {
+                    println!("Unstored {}", key.to_string());
+                    continue;
+                }
+                println!("Deleted data");
             }
             "quit" | "exit" => {
                 println!("Bye!");
