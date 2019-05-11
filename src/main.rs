@@ -46,6 +46,55 @@ impl DataStore {
     }
 }
 
+fn store_from_cli(kvstore: &mut DataStore, commands: Vec<&str>) -> String {
+    if commands.len() != 3 {
+        return "Use > store <key> <value>".to_string();
+    }
+    let key: String = commands.get(1).unwrap().to_string();
+    let val: DataValue = DataValue::new(commands.get(2).unwrap().to_string());
+    match kvstore.store_data(key, val) {
+        Ok(message) => message,
+        Err(err) => err,
+    }
+}
+
+fn get_from_cli(kvstore: &DataStore, commands: Vec<&str>) -> String {
+    if commands.len() != 2 {
+        return "Use > get <key>".to_string();
+    }
+    let key: String = commands.get(1).unwrap().to_string();
+    let val: Option<&DataValue> = kvstore.get_data(&key);
+    if val.is_none() {
+        return "Unstored ".to_string() + &key;
+    }
+    let val: String = val.unwrap().value.to_string();
+    return "Getted value: ".to_string() + &val;
+}
+
+fn update_from_cli(kvstore: &mut DataStore, commands: Vec<&str>) -> String {
+    if commands.len() != 3 {
+        return "Use > update <key> <value>".to_string();
+    }
+    let key: String = commands.get(1).unwrap().to_string();
+    let val: DataValue = DataValue::new(commands.get(2).unwrap().to_string());
+    match kvstore.update_data(key, val) {
+        Ok(message) => message,
+        Err(err) => err,
+    }
+}
+
+fn delete_from_cli(kvstore: &mut DataStore, commands: Vec<&str>) -> String {
+    if commands.len() != 2 {
+        return "Use > delete <key>".to_string();
+    }
+    let key: String = commands.get(1).unwrap().to_string();
+    let val: Option<DataValue> = kvstore.delete_data(&key);
+    if val.is_none() {
+        return "Unstored ".to_string() + &key;
+    }
+    return "Deleted data".to_string();
+}
+
 fn main() {
     let mut kvstore: DataStore = DataStore::new();
     println!("Start Rust KeyValueStore.");
@@ -65,55 +114,16 @@ fn main() {
 
         match command {
             "store" => {
-                if commands.len() != 3 {
-                    println!("Use > store <key> <value>");
-                    continue;
-                }
-                let key: String = commands.get(1).unwrap().to_string();
-                let val: DataValue = DataValue::new(commands.get(2).unwrap().to_string());
-                match kvstore.store_data(key, val) {
-                    Ok(message) => println!("{}", message),
-                    Err(err) => println!("{}", err),
-                }
+                println!("{}", store_from_cli(&mut kvstore, commands));
             }
             "get" => {
-                if commands.len() != 2 {
-                    println!("Use > get <key>");
-                    continue;
-                }
-                let key: String = commands.get(1).unwrap().to_string();
-                let val: Option<&DataValue> = kvstore.get_data(&key);
-                if val.is_none() {
-                    println!("Unstored {}", key.to_string());
-                    continue;
-                }
-                let val: String = val.unwrap().value.to_string();
-                println!("Getted value: {}", &val);
+                println!("{}", get_from_cli(&kvstore, commands));
             }
             "update" => {
-                if commands.len() != 3 {
-                    println!("Use > update <key> <value>");
-                    continue;
-                }
-                let key: String = commands.get(1).unwrap().to_string();
-                let val: DataValue = DataValue::new(commands.get(2).unwrap().to_string());
-                match kvstore.update_data(key, val) {
-                    Ok(message) => println!("{}", message),
-                    Err(err) => println!("{}", err),
-                }
+                println!("{}", update_from_cli(&mut kvstore, commands));
             }
             "delete" => {
-                if commands.len() != 2 {
-                    println!("Use > delete <key>");
-                    continue;
-                }
-                let key: String = commands.get(1).unwrap().to_string();
-                let val: Option<DataValue> = kvstore.delete_data(&key);
-                if val.is_none() {
-                    println!("Unstored {}", key.to_string());
-                    continue;
-                }
-                println!("Deleted data");
+                println!("{}", delete_from_cli(&mut kvstore, commands));
             }
             "quit" | "exit" => {
                 println!("Bye!");
