@@ -152,3 +152,21 @@ fn cli_get_test() {
     let result: String = get_from_cli(&mut kvstore, commands);
     assert_eq!(result, "Getted value: testdata")
 }
+
+#[test]
+fn cli_update_test() {
+    let mut kvstore: DataStore = DataStore::new();
+    kvstore.store.insert("testkey".to_string(), DataValue::new("testdata".to_string()));
+    let commands: Vec<&str> = "update testkey newdata".split(" ").collect();
+    let result: String = update_from_cli(&mut kvstore, commands);
+    assert_eq!(result, "Updated data")
+}
+
+#[test]
+fn cli_delete_test() {
+    let mut kvstore: DataStore = DataStore::new();
+    kvstore.store.insert("testkey".to_string(), DataValue::new("testdata".to_string()));
+    let commands: Vec<&str> = "delete testkey".split(" ").collect();
+    let result: String = delete_from_cli(&mut kvstore, commands);
+    assert_eq!(result, "Deleted data")
+}
