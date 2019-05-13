@@ -137,7 +137,7 @@ fn main() {
 }
 
 #[test]
-fn cli_insret_test() {
+fn store_from_cli_test() {
     let mut kvstore: DataStore = DataStore::new();
     let commands: Vec<&str> ="store testkey testdata".split(" ").collect();
     let result: String = store_from_cli(&mut kvstore, commands);
@@ -145,7 +145,7 @@ fn cli_insret_test() {
 }
 
 #[test]
-fn cli_get_test() {
+fn get_from_cli_test() {
     let mut kvstore: DataStore = DataStore::new();
     kvstore.store.insert("testkey".to_string(), DataValue::new("testdata".to_string()));
     let commands: Vec<&str> ="get testkey".split(" ").collect();
@@ -154,7 +154,7 @@ fn cli_get_test() {
 }
 
 #[test]
-fn cli_update_test() {
+fn update_from_cli_test() {
     let mut kvstore: DataStore = DataStore::new();
     kvstore.store.insert("testkey".to_string(), DataValue::new("testdata".to_string()));
     let commands: Vec<&str> = "update testkey newdata".split(" ").collect();
@@ -163,7 +163,7 @@ fn cli_update_test() {
 }
 
 #[test]
-fn cli_delete_test() {
+fn delete_from_cli_test() {
     let mut kvstore: DataStore = DataStore::new();
     kvstore.store.insert("testkey".to_string(), DataValue::new("testdata".to_string()));
     let commands: Vec<&str> = "delete testkey".split(" ").collect();
