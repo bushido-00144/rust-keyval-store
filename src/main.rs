@@ -135,3 +135,20 @@ fn main() {
         }
     }
 }
+
+#[test]
+fn cli_insret_test() {
+    let mut kvstore: DataStore = DataStore::new();
+    let commands: Vec<&str> ="store testkey testdata".split(" ").collect();
+    let result: String = store_from_cli(&mut kvstore, commands);
+    assert_eq!(result, "Stored data")
+}
+
+#[test]
+fn cli_get_test() {
+    let mut kvstore: DataStore = DataStore::new();
+    kvstore.store.insert("testkey".to_string(), DataValue::new("testdata".to_string()));
+    let commands: Vec<&str> ="get testkey".split(" ").collect();
+    let result: String = get_from_cli(&mut kvstore, commands);
+    assert_eq!(result, "Getted value: testdata")
+}
