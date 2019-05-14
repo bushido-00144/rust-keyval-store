@@ -170,3 +170,11 @@ fn delete_from_cli_test() {
     let result: String = delete_from_cli(&mut kvstore, commands);
     assert_eq!(result, "Deleted data")
 }
+
+#[test]
+fn store_from_cli_insufficient_arg_test() {
+    let mut kvstore: DataStore = DataStore::new();
+    let commands: Vec<&str> ="store testkey".split(" ").collect();
+    let result: String = store_from_cli(&mut kvstore, commands);
+    assert_eq!(result, "Use > store <key> <value>")
+}
