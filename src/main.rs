@@ -213,6 +213,14 @@ fn update_from_cli_insufficient_arg_test() {
 }
 
 #[test]
+fn update_unstored_data_from_cli_test() {
+    let mut kvstore: DataStore = DataStore::new();
+    let commands: Vec<&str> = "update testkey testdata".split(" ").collect();
+    let result: String = update_from_cli(&mut kvstore, commands);
+    assert_eq!(result, "Not found key")
+}
+
+#[test]
 fn delete_from_cli_insufficient_arg_test() {
     let mut kvstore: DataStore = DataStore::new();
     let commands: Vec<&str> = "delete".split(" ").collect();
