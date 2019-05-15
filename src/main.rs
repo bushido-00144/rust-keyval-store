@@ -180,6 +180,15 @@ fn store_from_cli_insufficient_arg_test() {
 }
 
 #[test]
+fn duplicate_data_store_from_cli_test() {
+    let mut kvstore: DataStore = DataStore::new();
+    kvstore.store.insert("testkey".to_string(), DataValue::new("testdata".to_string()));
+    let commands: Vec<&str> ="store testkey testdata2".split(" ").collect();
+    let result: String = store_from_cli(&mut kvstore, commands);
+    assert_eq!(result, "Already exist key")
+}
+
+#[test]
 fn get_from_cli_insufficient_arg_test() {
     let mut kvstore: DataStore = DataStore::new();
     let commands: Vec<&str> ="get".split(" ").collect();
