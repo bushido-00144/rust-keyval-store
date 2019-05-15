@@ -197,6 +197,14 @@ fn get_from_cli_insufficient_arg_test() {
 }
 
 #[test]
+fn get_unstore_data_from_cli_test() {
+    let mut kvstore: DataStore = DataStore::new();
+    let commands: Vec<&str> ="get testkey".split(" ").collect();
+    let result: String = get_from_cli(&mut kvstore, commands);
+    assert_eq!(result, "Unstored testkey")
+}
+
+#[test]
 fn update_from_cli_insufficient_arg_test() {
     let mut kvstore: DataStore = DataStore::new();
     let commands: Vec<&str> = "update".split(" ").collect();
