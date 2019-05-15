@@ -186,3 +186,12 @@ fn get_from_cli_insufficient_arg_test() {
     let result: String = store_from_cli(&mut kvstore, commands);
     assert_eq!(result, "Use > store <key> <value>")
 }
+
+#[test]
+fn update_from_cli_insufficient_arg_test() {
+    let mut kvstore: DataStore = DataStore::new();
+    let commands: Vec<&str> = "update".split(" ").collect();
+    let result: String = update_from_cli(&mut kvstore, commands);
+    assert_eq!(result, "Use > update <key> <value>")
+}
+
